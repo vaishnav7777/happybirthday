@@ -1,5 +1,6 @@
 // trigger to play music in the background with sweetalert
 window.addEventListener('load', () => {
+    // First SweetAlert asking if they want to play music
     Swal.fire({
         title: 'Do you want to play music in the background?',
         icon: 'warning',
@@ -10,9 +11,28 @@ window.addEventListener('load', () => {
         cancelButtonText: 'No',
     }).then((result) => {
         if (result.isConfirmed) {
-            document.querySelector('.song').play();
-            animationTimeline();
+            // If they say 'Yes', show a second SweetAlert asking to actually play the audio
+            Swal.fire({
+                title: 'Do you want to play the audio now?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Play Audio',
+                cancelButtonText: 'No, thanks',
+            }).then((secondResult) => {
+                if (secondResult.isConfirmed) {
+                    // If they confirm 'Play Audio', start playing the song
+                    document.querySelector('.song').play();
+                    // Trigger animation or any other logic
+                    animationTimeline();
+                } else {
+                    // Optionally trigger some action if they cancel the second prompt
+                    animationTimeline();
+                }
+            });
         } else {
+            // If they choose 'No' on the first prompt, you can trigger an animation or logic
             animationTimeline();
         }
     });
@@ -255,7 +275,7 @@ const animationTimeline = () => {
         y: 30,
         zIndex: "-1",
     })
-    .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
+    .staggerFrom(".nine p", 0.8, ideaTextTrans, 0.8)
     .to(
         ".last-smile",
         0.5, {
